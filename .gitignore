@@ -1,0 +1,29 @@
+# Build results
+bin/
+obj/
+
+# Logs
+logs/
+*.log
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Rider
+.idea/
+
+# Node (for React project)
+node_modules/
+build/
+dist/
+
+# .NET
+*.dll
+*.exe
+*.pdb
