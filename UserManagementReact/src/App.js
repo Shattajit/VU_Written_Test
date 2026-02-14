@@ -19,7 +19,8 @@ function App() {
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
 
-  const API_BASE_URL = 'http://localhost:5000/api';
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  console.log("ENV:", process.env.REACT_APP_API_BASE_URL);
 
   // Fetch users with pagination
   const fetchUsers = async (page = 1) => {
@@ -33,9 +34,8 @@ function App() {
         }
       });
       
-      console.log('API Response:', response.data); // Debug
+      console.log('API Response:', response.data); 
       
-      // Handle both PascalCase (C#) and camelCase
       setUsers(response.data.Users || response.data.users || []);
       setCurrentPage(response.data.Page || response.data.page || 1);
       setTotalPages(response.data.TotalPages || response.data.totalPages || 1);
@@ -55,7 +55,7 @@ function App() {
     try {
       const response = await axios.post(`${API_BASE_URL}/create-bulk-users`);
       alert(`Success! Created ${response.data.count || response.data.Count} users in ${(response.data.durationSeconds || response.data.DurationSeconds).toFixed(2)} seconds`);
-      fetchUsers(1); // Refresh to first page
+      fetchUsers(1); 
     } catch (err) {
       setError('Failed to create bulk users: ' + err.message);
       console.error('Error creating bulk users:', err);
@@ -64,7 +64,6 @@ function App() {
     }
   };
 
-  // Handle form input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -73,7 +72,6 @@ function App() {
     }));
   };
 
-  // Submit create user form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormSubmitting(true);
@@ -83,12 +81,10 @@ function App() {
     try {
       const response = await axios.post(`${API_BASE_URL}/create-users`, formData);
       setFormSuccess(true);
-      setFormData({ name: '', age: '', email: '' }); // Reset form
+      setFormData({ name: '', age: '', email: '' }); 
       
-      // Show success message
       alert(`User created successfully! ID: ${response.data.id || response.data.Id}`);
       
-      // Refresh user list
       fetchUsers(currentPage);
     } catch (err) {
       setError('Failed to create user: ' + err.message);
@@ -98,12 +94,10 @@ function App() {
     }
   };
 
-  // Load users on component mount
   useEffect(() => {
     fetchUsers(1);
   }, []);
 
-  // Pagination handlers
   const goToPage = (page) => {
     if (page >= 1 && page <= totalPages) {
       fetchUsers(page);
